@@ -39,27 +39,6 @@ func (c *Component) readLoopState() (stateFn, error) {
 			if err := c.IqHandler(c, &iq); err != nil {
 				return nil, err
 			}
-
-			/*
-				if iq.Type == "get" {
-
-					iqResp := &Iq{
-						Header: Header{
-							From: iq.To,
-							To:   iq.From,
-							ID:   iq.ID,
-						},
-						Type: "result",
-						Content: `
-						  <vCard xmlns='vcard-temp'>
-								<FN>Sheena Artrip</FN>
-						  </vCard>
-							`,
-					}
-
-					c.enc.Encode(&iqResp)
-				}
-			*/
 		}
 	}
 
