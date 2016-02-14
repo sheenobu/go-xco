@@ -22,25 +22,34 @@ Library for building XMPP/Jabber ([XEP-0114](http://xmpp.org/extensions/xep-0114
 		}
 
 		// Uppercase Echo Component
-		c.MessageHandler = func(c *xco.Component, msg *xco.Message) error {
-			m := xco.Message{
-				Header: xco.Header{
-					From: msg.To,
-					To:   msg.From,
-					ID:   msg.ID,
-				},
-				Subject: msg.Subject,
-				Thread:  msg.Thread,
-				Type:    msg.Type,
-				Body:    strings.ToUpper(msg.Body),
-				XMLName: msg.XMLName,
-			}
-
-			return c.Send(m)
-		}
-
+		c.MessageHandler = xco.BodyResponseHandler(func(msg *xco.Message) (string, error) {
+			return strings.ToUpper(msg.Body), nil
+		})
+		
 		c.Run()
 	}
 
+## Raw Usage
 
+The various handlers take the arguments of Component and either Message, Iq, Presence, etc.
+
+You can work with the messages directly without a helper function:
+
+	// Uppercase Echo Component
+	c.MessageHandler = func(c *xco.Component, msg *xco.Message) error {
+		resp := xco.Message{
+			Header: xco.Header{
+				From: msg.To,
+				To:   msg.From,
+				ID:   msg.ID,
+			},
+			Subject: msg.Subject,
+			Thread:  msg.Thread,
+			Type:    msg.Type,
+			Body:    strings.ToUpper(msg.Body),
+			XMLName: msg.XMLName,
+		}
+
+		return c.Send(resp)
+	}
 

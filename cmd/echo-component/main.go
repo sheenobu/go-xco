@@ -40,22 +40,9 @@ func main() {
 	}
 
 	// Uppercase Echo Component
-	c.MessageHandler = func(c *xco.Component, msg *xco.Message) error {
-		m := xco.Message{
-			Header: xco.Header{
-				From: msg.To,
-				To:   msg.From,
-				ID:   msg.ID,
-			},
-			Subject: msg.Subject,
-			Thread:  msg.Thread,
-			Type:    msg.Type,
-			Body:    strings.ToUpper(msg.Body),
-			XMLName: msg.XMLName,
-		}
-
-		return c.Send(m)
-	}
+	c.MessageHandler = xco.BodyResponseHandler(func(msg *xco.Message) (string, error) {
+		return strings.ToUpper(msg.Body), nil
+	})
 
 	c.Run()
 }

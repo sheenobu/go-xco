@@ -41,3 +41,30 @@ type MessageHandler func(*Component, *Message) error
 func noOpMessageHandler(c *Component, m *Message) error {
 	return nil
 }
+
+// BodyResponseHandler builds a simple request-response style function which returns the body
+// of the response message
+func BodyResponseHandler(fn func(*Message) (string, error)) MessageHandler {
+	return func(c *Component, m *Message) error {
+
+		body, err := fn(m)
+		if err != nil {
+			return err
+		}
+
+		resp := Message{
+			Header: Header{
+				From: m.To,
+				To:   m.From,
+				ID:   m.ID,
+			},
+			Subject: m.Subject,
+			Thread:  m.Thread,
+			Type:    m.Type,
+			Body:    body,
+			XMLName: m.XMLName,
+		}
+
+		return c.Send(resp)
+	}
+}
