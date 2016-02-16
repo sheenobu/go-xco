@@ -16,6 +16,7 @@ type Component struct {
 	MessageHandler  MessageHandler
 	PresenceHandler PresenceHandler
 	IqHandler       IqHandler
+	UnknownHandler  UnknownElementHandler
 
 	ctx      context.Context
 	cancelFn context.CancelFunc
@@ -39,6 +40,7 @@ func (c *Component) dial(o *Options) error {
 	c.MessageHandler = noOpMessageHandler
 	c.PresenceHandler = noOpPresenceHandler
 	c.IqHandler = noOpIqHandler
+	c.UnknownHandler = noOpUnknownHandler
 
 	c.conn = conn
 	c.name = o.Name

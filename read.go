@@ -2,6 +2,13 @@ package xco
 
 import "encoding/xml"
 
+// UnknownElementHandler handles unknown XML entities sent through XMPP
+type UnknownElementHandler func(*Component, *xml.StartElement) error
+
+func noOpUnknownHandler(c *Component, x *xml.StartElement) error {
+	return nil
+}
+
 func (c *Component) readLoopState() (stateFn, error) {
 
 	t, err := c.dec.Token()
@@ -37,6 +44,10 @@ func (c *Component) readLoopState() (stateFn, error) {
 			}
 
 			if err := c.IqHandler(c, &iq); err != nil {
+				return nil, err
+			}
+		} else {
+			if err := c.UnknownHandler(c, &st); err != nil {
 				return nil, err
 			}
 		}
