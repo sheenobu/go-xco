@@ -1,14 +1,27 @@
 package xco
 
 const (
-	SUBSCRIBE    = "subscribe"
-	SUBSCRIBED   = "subscribed"
-	UNSUBSCRIBE  = "unsubscribe"
+
+	// SUBSCRIBE represents the subscribe Presence message type
+	SUBSCRIBE = "subscribe"
+
+	// SUBSCRIBED represents the subscribed Presence message type
+	SUBSCRIBED = "subscribed"
+
+	// UNSUBSCRIBE represents the unsubsribe Presence message type
+	UNSUBSCRIBE = "unsubscribe"
+
+	// UNSUBSCRIBED represents the unsubsribed Presence message type
 	UNSUBSCRIBED = "unsubscribed"
-	UNAVAILABLE  = "unavailable"
-	PROBE        = "probe"
+
+	// UNAVAILABLE represents the unavailable Presence message type
+	UNAVAILABLE = "unavailable"
+
+	// PROBE represents the probe Presence message type
+	PROBE = "probe"
 )
 
+// Presence represents a message identifying whether an entity is available and the subscription requests/responses for the entity
 type Presence struct {
 	Header
 
@@ -21,6 +34,7 @@ type Presence struct {
 	XMLName string `xml:"presence"`
 }
 
+// PresenceHandler handles presence requests
 type PresenceHandler func(c *Component, p *Presence) error
 
 func noOpPresenceHandler(c *Component, p *Presence) error {

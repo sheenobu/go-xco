@@ -1,5 +1,6 @@
 package xco
 
+// Iq represents an info/query message
 type Iq struct {
 	Header
 
@@ -10,6 +11,7 @@ type Iq struct {
 	XMLName string `xml:"iq"`
 }
 
+// IqHandler handles Iq messages
 type IqHandler func(c *Component, iq *Iq) error
 
 func noOpIqHandler(c *Component, iq *Iq) error {

@@ -52,10 +52,15 @@ func (c *Component) dial(o *Options) error {
 	return nil
 }
 
+// Close closes the Component
 func (c *Component) Close() {
+	if c == nil {
+		return
+	}
 	c.cancelFn()
 }
 
+// Run runs the component handlers loop and waits for it to finish
 func (c *Component) Run() {
 
 	defer func() {
@@ -75,6 +80,12 @@ func (c *Component) Run() {
 	}
 }
 
+// Send sends the given pointer struct by serializing it to XML.
 func (c *Component) Send(i interface{}) error {
 	return c.enc.Encode(i)
+}
+
+// Write implements the io.Writer interface to allow direct writing to the XMPP connection
+func (c *Component) Write(b []byte) (int, error) {
+	return c.conn.Write(b)
 }
