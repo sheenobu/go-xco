@@ -31,7 +31,7 @@ type Component struct {
 	name         string
 }
 
-func (c *Component) dial(o *Options) error {
+func (c *Component) init(o *Options) error {
 	conn, err := net.Dial("tcp", o.Address)
 	if err != nil {
 		return err

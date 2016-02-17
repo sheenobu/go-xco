@@ -28,7 +28,7 @@ func (opts *Options) NewComponent() (*Component, error) {
 	var c Component
 	c.ctx, c.cancelFn = context.WithCancel(opts.Context)
 
-	if err := c.dial(opts); err != nil {
+	if err := c.init(opts); err != nil {
 		return nil, err
 	}
 
