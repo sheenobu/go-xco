@@ -1,5 +1,7 @@
 # go-xco
 
+[![GoDoc](https://godoc.org/github.com/sheenobu/go-xco?status.svg)](https://godoc.org/github.com/sheenobu/go-xco)
+
 Library for building XMPP/Jabber ([XEP-0114](http://xmpp.org/extensions/xep-0114.html)) components in golang.
 
 ## Usage:
