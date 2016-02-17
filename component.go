@@ -75,7 +75,7 @@ func (c *Component) Run() {
 		}
 		c.stateFn, err = c.stateFn()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %s\n", err)
+			fmt.Fprintf(os.Stderr, "Error: %s\n", err) //TODO: implement error logging via a handler
 		}
 	}
 }
