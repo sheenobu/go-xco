@@ -11,7 +11,7 @@ type Iq struct {
 	XMLName string `xml:"iq"`
 }
 
-// IqHandler handles Iq messages
+// IqHandler handles an incoming Iq (info/query) request
 type IqHandler func(c *Component, iq *Iq) error
 
 func noOpIqHandler(c *Component, iq *Iq) error {

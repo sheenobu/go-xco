@@ -34,7 +34,7 @@ type Presence struct {
 	XMLName string `xml:"presence"`
 }
 
-// PresenceHandler handles presence requests
+// PresenceHandler handles incoming presence requests
 type PresenceHandler func(c *Component, p *Presence) error
 
 func noOpPresenceHandler(c *Component, p *Presence) error {

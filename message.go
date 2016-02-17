@@ -35,7 +35,7 @@ type Message struct {
 	XMLName xml.Name
 }
 
-// A MessageHandler handles a message
+// A MessageHandler handles an incoming message
 type MessageHandler func(*Component, *Message) error
 
 func noOpMessageHandler(c *Component, m *Message) error {
