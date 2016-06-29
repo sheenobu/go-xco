@@ -2,9 +2,7 @@ package xco
 
 import (
 	"encoding/xml"
-	"fmt"
 	"net"
-	"os"
 
 	"golang.org/x/net/context"
 )
@@ -61,21 +59,19 @@ func (c *Component) Close() {
 }
 
 // Run runs the component handlers loop and waits for it to finish
-func (c *Component) Run() {
+func (c *Component) Run() (err error) {
 
 	defer func() {
 		c.conn.Close()
 	}()
 
-	var err error
-
 	for {
 		if c.stateFn == nil {
-			return
+			return nil
 		}
 		c.stateFn, err = c.stateFn()
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error: %s\n", err) //TODO: implement error logging via a handler
+			return err
 		}
 	}
 }
