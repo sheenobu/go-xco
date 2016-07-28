@@ -16,13 +16,10 @@ type Address struct {
 }
 
 // ParseAddress parses the address from the given string
-func ParseAddress(s string) (*Address, error) {
+func ParseAddress(s string) (Address, error) {
 	var addr Address
-	if err := addr.parse(s); err != nil {
-		return nil, err
-	}
-
-	return &addr, nil
+	err := addr.parse(s)
+	return addr, err
 }
 
 // Equals compares the given address
