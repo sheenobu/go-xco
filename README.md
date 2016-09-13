@@ -52,6 +52,6 @@ You can work with the messages directly without a helper function:
 			XMLName: msg.XMLName,
 		}
 
-		return c.Send(resp)
+		return c.Send(&resp)
 	}
 
