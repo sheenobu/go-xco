@@ -8,20 +8,20 @@ import (
 	"fmt"
 )
 
-func (c *Component) handshakeState() (stateFn, error) {
+func (c *Component) handshakeState() (st stateFn, err error) {
 
-	if _, err := c.conn.Write([]byte(fmt.Sprintf(`
+	if _, err = c.conn.Write([]byte(fmt.Sprintf(`
 		<stream:stream
 			xmlns='jabber:component:accept'
 			xmlns:stream='http://etherx.jabber.org/streams'
 			to='%s'>`, c.name))); err != nil {
-		return nil, err
+		return
 	}
 
 	for {
-		t, err := c.dec.Token()
-		if err != nil {
-			return nil, err
+		var t xml.Token
+		if t, err = c.dec.Token(); err != nil {
+			return
 		}
 
 		stream, ok := t.(xml.StartElement)
@@ -38,14 +38,14 @@ func (c *Component) handshakeState() (stateFn, error) {
 		}
 
 		if id == "" {
-			return nil, errors.New("Unable to find ID in stream response")
+			err = errors.New("Unable to find ID in stream response")
 		}
 
 		handshakeInput := id + c.sharedSecret
 		handshake := sha1.Sum([]byte(handshakeInput))
 		hexHandshake := hex.EncodeToString(handshake[:])
-		if _, err := c.conn.Write([]byte(fmt.Sprintf("<handshake>%s</handshake>", hexHandshake))); err != nil {
-			return nil, err
+		if _, err = c.conn.Write([]byte(fmt.Sprintf("<handshake>%s</handshake>", hexHandshake))); err != nil {
+			return
 		}
 
 		//TODO: separate each step into a state
@@ -53,14 +53,15 @@ func (c *Component) handshakeState() (stateFn, error) {
 		// get handshake response
 		t, err = c.dec.Token()
 		if err != nil {
-			return nil, err
+			return
 		}
 
 		t, err = c.dec.Token()
 		if err != nil {
-			return nil, err
+			return
 		}
 
-		return c.readLoopState, nil
+		st = c.readLoopState
+		return
 	}
 }
