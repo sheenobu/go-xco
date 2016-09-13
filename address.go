@@ -95,7 +95,7 @@ func (a *Address) parse(s string) error {
 	}
 
 	if idx := strings.IndexAny(s, "/"); idx != -1 {
-		a.ResourcePart = s[idx+1 : len(s)]
+		a.ResourcePart = s[idx+1:]
 		domainEnd = idx
 	}
 
