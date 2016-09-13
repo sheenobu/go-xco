@@ -1,6 +1,8 @@
 package xco
 
-import "github.com/pkg/errors"
+import (
+	"github.com/pkg/errors"
+)
 
 const (
 
@@ -55,4 +57,11 @@ func AlwaysOnlinePresenceHandler(c *Component, p *Presence) error {
 	}
 
 	return errors.Wrap(c.Send(resp), "Error sending always online presence")
+}
+
+// ToAddressPresenceHandler calls the function with the To address
+func ToAddressPresenceHandler(fn func(subject Address) error) PresenceHandler {
+	return func(c *Component, p *Presence) error {
+		return fn(p.To)
+	}
 }
