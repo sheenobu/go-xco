@@ -2,7 +2,8 @@ package xco
 
 import "testing"
 
-var nilAddress Address
+var nilAddress = Address{}
+var withDomain = Address{DomainPart: "example.com"}
 
 var parseAddressTests = []struct {
 	Input  string
@@ -11,9 +12,9 @@ var parseAddressTests = []struct {
 }{
 	{"", nilAddress, "Address is empty"},
 	{"           ", nilAddress, "Address is empty"},
-	{"@example.com", nilAddress, "Localpart is empty"},
-	{"example.com/", nilAddress, "Resourcepart is empty"},
-	{"@example.com/", nilAddress, "Multiple errors: [Localpart is empty Resourcepart is empty]"},
+	{"@example.com", withDomain, "Localpart is empty"},
+	{"example.com/", withDomain, "Resourcepart is empty"},
+	{"@example.com/", withDomain, "Multiple errors: [Localpart is empty Resourcepart is empty]"},
 	{"@/", nilAddress, "Multiple errors: [Domain is empty Localpart is empty Resourcepart is empty]"},
 
 	{"example.com", Address{"", "example.com", ""}, ""},
