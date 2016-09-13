@@ -24,7 +24,7 @@ func ParseAddress(s string) (Address, error) {
 
 // Equals compares the given address
 func (a *Address) Equals(o *Address) bool {
-	return (a == o) || ((a != nil && o != nil) && (a.LocalPart == o.LocalPart && a.DomainPart == a.DomainPart && a.ResourcePart == o.ResourcePart))
+	return (a == o) || ((a != nil && o != nil) && (a.LocalPart == o.LocalPart && a.DomainPart == o.DomainPart && a.ResourcePart == o.ResourcePart))
 }
 
 // String formats the address as an XMPP JID
