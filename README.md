@@ -12,13 +12,13 @@ Library for building XMPP/Jabber ([XEP-0114](http://xmpp.org/extensions/xep-0114
 
 	func main(){
 
-		opts := &xco.Options{
+		opts := xco.Options{
 			Name:         Name,
 			SharedSecret: SharedSecret,
 			Address:      Address,
 		}
 
-		c, err := opts.NewComponent()
+		c, err := xco.NewComponent(opts)
 		if err != nil {
 			panic(err)
 		}
