@@ -4,6 +4,8 @@ import (
 	"encoding/xml"
 	"net"
 
+	"github.com/pkg/errors"
+
 	"golang.org/x/net/context"
 )
 
@@ -78,7 +80,7 @@ func (c *Component) Run() (err error) {
 
 // Send sends the given pointer struct by serializing it to XML.
 func (c *Component) Send(i interface{}) error {
-	return c.enc.Encode(i)
+	return errors.Wrap(c.enc.Encode(i), "Error encoding object to XML")
 }
 
 // Write implements the io.Writer interface to allow direct writing to the XMPP connection

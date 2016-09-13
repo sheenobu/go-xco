@@ -1,6 +1,10 @@
 package xco
 
-import "encoding/xml"
+import (
+	"encoding/xml"
+
+	"github.com/pkg/errors"
+)
 
 // MessageType defines the constants for the types of messages within XEP-0114
 type MessageType string
@@ -65,6 +69,6 @@ func BodyResponseHandler(fn func(*Message) (string, error)) MessageHandler {
 			XMLName: m.XMLName,
 		}
 
-		return c.Send(resp)
+		return errors.Wrap(c.Send(resp), "Error sending message response")
 	}
 }
