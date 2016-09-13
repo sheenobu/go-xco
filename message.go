@@ -52,7 +52,7 @@ func BodyResponseHandler(fn func(*Message) (string, error)) MessageHandler {
 			return err
 		}
 
-		resp := Message{
+		resp := &Message{
 			Header: Header{
 				From: m.To,
 				To:   m.From,
