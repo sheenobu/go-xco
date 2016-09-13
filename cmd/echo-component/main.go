@@ -44,6 +44,8 @@ func main() {
 		return strings.ToUpper(msg.Body), nil
 	})
 
+	c.PresenceHandler = xco.AlwaysOnlinePresenceHandler
+
 	if err := c.Run(); err != nil {
 		panic(err)
 	}

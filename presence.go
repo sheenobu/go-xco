@@ -1,5 +1,7 @@
 package xco
 
+import "github.com/pkg/errors"
+
 const (
 
 	// SUBSCRIBE represents the subscribe Presence message type
@@ -39,4 +41,18 @@ type PresenceHandler func(c *Component, p *Presence) error
 
 func noOpPresenceHandler(c *Component, p *Presence) error {
 	return nil
+}
+
+// AlwaysOnlinePresenceHandler always returns "subscribed" to any presence requests
+func AlwaysOnlinePresenceHandler(c *Component, p *Presence) error {
+	resp := &Presence{
+		Header: Header{
+			From: p.To,
+			To:   p.From,
+			ID:   p.ID,
+		},
+		Type: "subscribed",
+	}
+
+	return errors.Wrap(c.Send(resp), "Error sending always online presence")
 }
