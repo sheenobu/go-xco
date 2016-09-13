@@ -3,7 +3,6 @@ package xco
 import (
 	"bytes"
 	"encoding/xml"
-	"os"
 	"testing"
 )
 
@@ -46,7 +45,8 @@ func TestReadHeader(t *testing.T) {
 }
 
 func TestWriteHeader(t *testing.T) {
-	enc := xml.NewEncoder(os.Stdout)
+	b := bytes.NewBuffer([]byte(""))
+	enc := xml.NewEncoder(b)
 
 	var h Header
 
