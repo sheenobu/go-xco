@@ -28,13 +28,13 @@ func main() {
 		return
 	}
 
-	opts := &xco.Options{
+	opts := xco.Options{
 		Name:         Name,
 		SharedSecret: SharedSecret,
 		Address:      Address,
 	}
 
-	c, err := opts.NewComponent()
+	c, err := xco.NewComponent(opts)
 	if err != nil {
 		panic(err)
 	}

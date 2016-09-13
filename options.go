@@ -19,7 +19,7 @@ type Options struct {
 }
 
 // NewComponent creates a new component from the given options
-func (opts *Options) NewComponent() (*Component, error) {
+func NewComponent(opts Options) (*Component, error) {
 
 	if opts.Context == nil {
 		opts.Context = context.Background()
