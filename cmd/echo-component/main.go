@@ -44,5 +44,7 @@ func main() {
 		return strings.ToUpper(msg.Body), nil
 	})
 
-	c.Run()
+	if err := c.Run(); err != nil {
+		panic(err)
+	}
 }
