@@ -34,6 +34,7 @@ type Message struct {
 
 	Subject string `xml:"subject,omitempty"`
 	Body    string `xml:"body"`
+	Error   *Error `xml:"error"`
 	Thread  string `xml:"thread,omitempty"`
 
 	XMLName xml.Name
