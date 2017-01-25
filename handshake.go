@@ -11,11 +11,12 @@ import (
 )
 
 func sendStreamStart(w io.Writer, name string) (err error) {
-	_, err = w.Write([]byte(fmt.Sprintf(`
-		<stream:stream
+	_, err = fmt.Fprintf(w,
+		`<stream:stream
 			xmlns='jabber:component:accept'
 			xmlns:stream='http://etherx.jabber.org/streams'
-			to='%s'>`, name)))
+			to='%s'>`, name)
+	err = errors.Wrapf(err, "failed to write stream start for %s", name)
 	return
 }
 
@@ -23,9 +24,8 @@ func sendHandshake(w io.Writer, id string, sharedSecret string) (err error) {
 	handshakeInput := id + sharedSecret
 	handshake := sha1.Sum([]byte(handshakeInput))
 	hexHandshake := hex.EncodeToString(handshake[:])
-	if _, err = w.Write([]byte(fmt.Sprintf("<handshake>%s</handshake>", hexHandshake))); err != nil {
-		return
-	}
+	_, err = fmt.Fprintf(w, "<handshake>%s</handshake>", hexHandshake)
+	err = errors.Wrapf(err, "failed to write handshake for %s", id)
 	return
 }
 
@@ -47,7 +47,7 @@ func findStreamID(stream *xml.StartElement) (id string, err error) {
 
 func (c *Component) handshakeState() (st stateFn, err error) {
 
-	if err = sendStreamStart(c, c.name); err != nil {
+	if err = sendStreamStart(c.conn, c.name); err != nil {
 		err = errors.Wrapf(err, "Error sending streamStart")
 		return
 	}
@@ -70,7 +70,7 @@ func (c *Component) handshakeState() (st stateFn, err error) {
 			return
 		}
 
-		if err = sendHandshake(c, id, c.sharedSecret); err != nil {
+		if err = sendHandshake(c.conn, id, c.sharedSecret); err != nil {
 			err = errors.Wrapf(err, "Failed to send handshake")
 			return
 		}
