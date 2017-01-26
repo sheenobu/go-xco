@@ -2,6 +2,7 @@ package xco
 
 import (
 	"encoding/xml"
+	"log"
 	"net"
 
 	"github.com/pkg/errors"
@@ -24,6 +25,7 @@ type Component struct {
 	conn net.Conn
 	dec  *xml.Decoder
 	enc  *xml.Encoder
+	log  *log.Logger
 
 	stateFn stateFn
 
@@ -45,8 +47,14 @@ func (c *Component) init(o Options) error {
 	c.conn = conn
 	c.name = o.Name
 	c.sharedSecret = o.SharedSecret
-	c.dec = xml.NewDecoder(conn)
-	c.enc = xml.NewEncoder(conn)
+	if o.Logger == nil {
+		c.dec = xml.NewDecoder(conn)
+		c.enc = xml.NewEncoder(conn)
+	} else {
+		c.log = o.Logger
+		c.dec = xml.NewDecoder(newReadLogger(c.log, conn))
+		c.enc = xml.NewEncoder(newWriteLogger(c.log, conn))
+	}
 	c.stateFn = c.handshakeState
 
 	return nil
