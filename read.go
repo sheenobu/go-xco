@@ -43,6 +43,12 @@ func (c *Component) readLoopState() (stateFn, error) {
 				return nil, err
 			}
 
+			// recognize XEP-0030 service discovery info queries
+			if iq.IsDiscoInfo() {
+				return c.discoInfo(&iq)
+			}
+
+			// handle all other iq stanzas
 			if err := c.IqHandler(c, &iq); err != nil {
 				return nil, err
 			}
@@ -51,6 +57,43 @@ func (c *Component) readLoopState() (stateFn, error) {
 				return nil, err
 			}
 		}
+	}
+
+	return c.readLoopState, nil
+}
+
+func (c *Component) discoInfo(iq *Iq) (stateFn, error) {
+	ids, features, err := c.DiscoInfoHandler(c, iq)
+	if err != nil {
+		return nil, err
+	}
+	if len(ids) < 1 {
+		return c.readLoopState, nil
+	}
+
+	features = append(features, DiscoFeature{
+		Var: discoInfoSpace,
+	})
+	query := DiscoInfoQuery{
+		Identities: ids,
+		Features:   features,
+	}
+	queryContent, err := xml.Marshal(query)
+	if err != nil {
+		return nil, err
+	}
+	resp := &Iq{
+		Header: Header{
+			From: iq.To,
+			To:   iq.From,
+			ID:   iq.ID,
+		},
+		Type:    "result",
+		Content: string(queryContent),
+		XMLName: iq.XMLName,
+	}
+	if err := c.Send(resp); err != nil {
+		return nil, err
 	}
 
 	return c.readLoopState, nil
