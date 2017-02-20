@@ -29,9 +29,9 @@ const (
 type Presence struct {
 	Header
 
-	Show     string `xml:"show"`
-	Status   string `xml:"status"`
-	Priority byte   `xml:"priority"`
+	Show     string `xml:"show,omitempty"`
+	Status   string `xml:"status,omitempty"`
+	Priority byte   `xml:"priority,omitempty"`
 
 	Type string `xml:"type,attr"`
 
