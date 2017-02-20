@@ -33,7 +33,7 @@ type Presence struct {
 	Status   string `xml:"status,omitempty"`
 	Priority byte   `xml:"priority,omitempty"`
 
-	Type string `xml:"type,attr"`
+	Type string `xml:"type,attr,omitempty"`
 
 	// XEP-0172 User nicknames
 	Nick string `xml:"http://jabber.org/protocol/nick nick,omitempty"`
