@@ -33,7 +33,7 @@ type Presence struct {
 	Status   string `xml:"status"`
 	Priority byte   `xml:"priority"`
 
-	Type string `xml:"type"`
+	Type string `xml:"type,attr"`
 
 	XMLName string `xml:"presence"`
 }
