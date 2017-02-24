@@ -35,6 +35,9 @@ type Presence struct {
 
 	Type string `xml:"type,attr"`
 
+	// XEP-0172 User nicknames
+	Nick string `xml:"http://jabber.org/protocol/nick nick,omitempty"`
+
 	XMLName string `xml:"presence"`
 }
 
