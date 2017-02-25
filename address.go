@@ -45,6 +45,14 @@ func (a *Address) String() string {
 	return buf.String()
 }
 
+// Bare returns a copy of this address with the resource part made
+// blank.
+func (a *Address) Bare() *Address {
+	b := *a
+	b.ResourcePart = ""
+	return &b
+}
+
 // UnmarshalXMLAttr marks the Address struct as being able to be parsed as an XML attribute
 func (a *Address) UnmarshalXMLAttr(attr xml.Attr) error {
 	return a.parse(attr.Value)

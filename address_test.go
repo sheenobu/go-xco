@@ -57,3 +57,29 @@ func TestStringAddress(t *testing.T) {
 		}
 	}
 }
+
+var bareAddressTests = []struct {
+	Input  string
+	Output string
+}{
+	{"example.com", "example.com"},
+	{"hello@example.com", "hello@example.com"},
+	{"example.com/home", "example.com"},
+	{"hello@example.com/home", "hello@example.com"},
+	{"goodbye@example.com/home", "goodbye@example.com"},
+}
+
+func TestBareAddress(t *testing.T) {
+	for _, test := range bareAddressTests {
+		a, err := ParseAddress(test.Input)
+		if err != nil {
+			t.Errorf("Invalid address: %s", test.Input)
+			continue
+		}
+
+		if a.Bare().String() != test.Output {
+			t.Errorf("%v.Bare() => {%s}, expected {%s}",
+				test.Input, a.Bare(), test.Output)
+		}
+	}
+}
