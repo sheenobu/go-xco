@@ -10,12 +10,12 @@ var parseAddressTests = []struct {
 	Output Address
 	Error  string
 }{
-	{"", nilAddress, "Address is empty"},
-	{"           ", nilAddress, "Address is empty"},
+	{"", nilAddress, ""},
+	{"           ", nilAddress, ""},
 	{"@example.com", withDomain, "Localpart is empty"},
 	{"example.com/", withDomain, "Resourcepart is empty"},
 	{"@example.com/", withDomain, "Multiple errors: [Localpart is empty Resourcepart is empty]"},
-	{"@/", nilAddress, "Multiple errors: [Domain is empty Localpart is empty Resourcepart is empty]"},
+	{"@/", nilAddress, "Multiple errors: [Localpart is empty Resourcepart is empty]"},
 
 	{"example.com", Address{"", "example.com", ""}, ""},
 	{"hello@example.com", Address{"hello", "example.com", ""}, ""},

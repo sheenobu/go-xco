@@ -13,7 +13,7 @@ func TestWriteMessage(t *testing.T) {
 	var h Message
 
 	err := enc.Encode(&h)
-	if err.Error() != "Malformed Address for Attribute { from}: [Domain is empty]" {
+	if err != nil {
 		t.Errorf("Unexpected error encoding message header: %s", err)
 		return
 	}
