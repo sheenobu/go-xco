@@ -78,6 +78,12 @@ func (c *Component) Run() (err error) {
 	}
 }
 
+// A Sender is an interface which allows sending of arbitrary objects
+// as XML to an XMPP server.
+type Sender interface {
+	Send(i interface{}) error
+}
+
 // Send sends the given pointer struct by serializing it to XML.
 func (c *Component) Send(i interface{}) error {
 	return errors.Wrap(c.enc.Encode(i), "Error encoding object to XML")
