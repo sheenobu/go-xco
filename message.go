@@ -36,6 +36,7 @@ type Message struct {
 	Body    string `xml:"body"`
 	Error   *Error `xml:"error"`
 	Thread  string `xml:"thread,omitempty"`
+	Content string `xml:",innerxml"` // allow arbitrary content
 
 	XMLName xml.Name
 }

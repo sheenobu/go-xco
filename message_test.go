@@ -3,6 +3,7 @@ package xco
 import (
 	"bytes"
 	"encoding/xml"
+	"fmt"
 	"testing"
 )
 
@@ -25,10 +26,15 @@ func TestWriteMessage(t *testing.T) {
 	h.To.DomainPart = "example.com"
 	h.To.ResourcePart = "home"
 
+	h.Content = "<hello/>"
+	h.Body = "hello"
+
 	err = enc.Encode(&h)
 	if err != nil {
 		t.Errorf("Unexpected error encoding message header: %s", err)
 		return
 	}
+
+	fmt.Println(b.String())
 
 }
