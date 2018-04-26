@@ -59,6 +59,7 @@ func TestWriteHeader(t *testing.T) {
 	//h.From.DomainPart = "example.com"
 	//h.From.ResourcePart = "home"
 
+	h.To = &Address{}
 	h.To.LocalPart = "goodbye"
 	h.To.DomainPart = "example.com"
 	h.To.ResourcePart = "home"
