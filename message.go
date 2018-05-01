@@ -42,7 +42,7 @@ type Message struct {
 	ReceiptRequest *xml.Name   `xml:"urn:xmpp:receipts request,omitempty"`
 	ReceiptAck     *ReceiptAck `xml:"urn:xmpp:receipts received,omitempty"`
 
-	XMLName xml.Name
+	XMLName xml.Name `xml:"message"`
 }
 
 // A MessageHandler handles an incoming message
