@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"golang.org/x/net/context"
+	"context"
 )
 
 type stateFn func() (stateFn, error)

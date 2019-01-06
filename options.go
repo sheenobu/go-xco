@@ -1,6 +1,6 @@
 package xco
 
-import "golang.org/x/net/context"
+import "context"
 
 // Options define the series of options required to build a component
 type Options struct {
