@@ -29,11 +29,14 @@ const (
 type Presence struct {
 	Header
 
-	Show     string `xml:"show"`
-	Status   string `xml:"status"`
-	Priority byte   `xml:"priority"`
+	Show     string `xml:"show,omitempty"`
+	Status   string `xml:"status,omitempty"`
+	Priority byte   `xml:"priority,omitempty"`
 
-	Type string `xml:"type"`
+	Type string `xml:"type,attr,omitempty"`
+
+	// XEP-0172 User nicknames
+	Nick string `xml:"http://jabber.org/protocol/nick nick,omitempty"`
 
 	XMLName string `xml:"presence"`
 }
@@ -62,6 +65,6 @@ func AlwaysOnlinePresenceHandler(c *Component, p *Presence) error {
 // ToAddressPresenceHandler calls the function with the To address
 func ToAddressPresenceHandler(fn func(subject Address) error) PresenceHandler {
 	return func(c *Component, p *Presence) error {
-		return fn(p.To)
+		return fn(*p.To)
 	}
 }

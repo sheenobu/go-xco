@@ -8,6 +8,8 @@ type Iq struct {
 
 	Content string `xml:",innerxml"`
 
+	Vcard *Vcard `xml:"vcard-temp vCard,omitempty"`
+
 	XMLName string `xml:"iq"`
 }
 

@@ -33,12 +33,19 @@ type Message struct {
 	Type MessageType `xml:"type,attr,omitempty"`
 
 	Subject string `xml:"subject,omitempty"`
-	Body    string `xml:"body"`
+	Body    string `xml:"body,omitempty"`
 	Error   *Error `xml:"error"`
 	Thread  string `xml:"thread,omitempty"`
 	Content string `xml:",innerxml"` // allow arbitrary content
 
-	XMLName xml.Name
+	// XEP-0184 message delivery receipts
+	ReceiptRequest *xml.Name   `xml:"urn:xmpp:receipts request,omitempty"`
+	ReceiptAck     *ReceiptAck `xml:"urn:xmpp:receipts received,omitempty"`
+
+	// XEP-0172 User nicknames
+	Nick string `xml:"http://jabber.org/protocol/nick nick,omitempty"`
+
+	XMLName xml.Name `xml:"message"`
 }
 
 // A MessageHandler handles an incoming message
@@ -57,20 +64,27 @@ func BodyResponseHandler(fn func(*Message) (string, error)) MessageHandler {
 		if err != nil {
 			return err
 		}
-
-		resp := &Message{
-			Header: Header{
-				From: m.To,
-				To:   m.From,
-				ID:   m.ID,
-			},
-			Subject: m.Subject,
-			Thread:  m.Thread,
-			Type:    m.Type,
-			Body:    body,
-			XMLName: m.XMLName,
-		}
-
+		resp := m.Response()
+		resp.Body = body
 		return errors.Wrap(c.Send(resp), "Error sending message response")
 	}
+}
+
+// Response returns a new message representing a response to this
+// message.  The To and From attributes of the header are reversed to
+// indicate the new origin.
+func (m *Message) Response() *Message {
+	resp := &Message{
+		Header: Header{
+			From: m.To,
+			To:   m.From,
+			ID:   m.ID,
+		},
+		Subject: m.Subject,
+		Thread:  m.Thread,
+		Type:    m.Type,
+		XMLName: m.XMLName,
+	}
+
+	return resp
 }

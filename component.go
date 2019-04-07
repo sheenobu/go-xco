@@ -2,6 +2,7 @@ package xco
 
 import (
 	"encoding/xml"
+	"log"
 	"net"
 
 	"github.com/pkg/errors"
@@ -13,10 +14,11 @@ type stateFn func() (stateFn, error)
 
 // A Component is an instance of a Jabber Component (XEP-0114)
 type Component struct {
-	MessageHandler  MessageHandler
-	PresenceHandler PresenceHandler
-	IqHandler       IqHandler
-	UnknownHandler  UnknownElementHandler
+	MessageHandler   MessageHandler
+	DiscoInfoHandler DiscoInfoHandler
+	PresenceHandler  PresenceHandler
+	IqHandler        IqHandler
+	UnknownHandler   UnknownElementHandler
 
 	ctx      context.Context
 	cancelFn context.CancelFunc
@@ -24,6 +26,7 @@ type Component struct {
 	conn net.Conn
 	dec  *xml.Decoder
 	enc  *xml.Encoder
+	log  *log.Logger
 
 	stateFn stateFn
 
@@ -38,6 +41,7 @@ func (c *Component) init(o Options) error {
 	}
 
 	c.MessageHandler = noOpMessageHandler
+	c.DiscoInfoHandler = noOpDiscoInfoHandler
 	c.PresenceHandler = noOpPresenceHandler
 	c.IqHandler = noOpIqHandler
 	c.UnknownHandler = noOpUnknownHandler
@@ -45,8 +49,14 @@ func (c *Component) init(o Options) error {
 	c.conn = conn
 	c.name = o.Name
 	c.sharedSecret = o.SharedSecret
-	c.dec = xml.NewDecoder(conn)
-	c.enc = xml.NewEncoder(conn)
+	if o.Logger == nil {
+		c.dec = xml.NewDecoder(conn)
+		c.enc = xml.NewEncoder(conn)
+	} else {
+		c.log = o.Logger
+		c.dec = xml.NewDecoder(newReadLogger(c.log, conn))
+		c.enc = xml.NewEncoder(newWriteLogger(c.log, conn))
+	}
 	c.stateFn = c.handshakeState
 
 	return nil

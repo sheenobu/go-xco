@@ -1,6 +1,10 @@
 package xco
 
-import "context"
+import (
+	"log"
+
+	"context"
+)
 
 // Options define the series of options required to build a component
 type Options struct {
@@ -16,6 +20,11 @@ type Options struct {
 
 	// The (optional) parent context
 	Context context.Context
+
+	// Logger is an optional logger to which to send raw XML stanzas
+	// sent and received.  It's primarily intended for debugging and
+	// development.
+	Logger *log.Logger
 }
 
 // NewComponent creates a new component from the given options

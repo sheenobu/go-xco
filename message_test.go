@@ -19,9 +19,11 @@ func TestWriteMessage(t *testing.T) {
 		return
 	}
 
+	h.From = &Address{}
 	h.From.DomainPart = "example.com"
 	h.From.ResourcePart = "home"
 
+	h.To = &Address{}
 	h.To.LocalPart = "goodbye"
 	h.To.DomainPart = "example.com"
 	h.To.ResourcePart = "home"
