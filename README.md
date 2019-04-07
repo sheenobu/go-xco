@@ -4,6 +4,18 @@
 
 Library for building XMPP/Jabber ([XEP-0114](http://xmpp.org/extensions/xep-0114.html)) components in golang.
 
+## XEPs
+
+Additional XEPs have been added through forks and cherry-picked into
+a downstream branch. If you've got additional XEPs to add, create a pull
+request or issue to list it:
+
+ * XEP-0114 - XMPP Components
+ * XEP-0172 - User Nicknames [mndrix/go-xco](https://github.com/mndrix/go-xco)
+ * XEP-0184 - Message Delivery Receipt [mndrix/go-xco](https://github.com/mndrix/go-xco)
+ * XEP-0030 - Service Discovery [mndrix/go-xco](https://github.com/mndrix/go-xco)
+ * XEP-0054 - vCard [mndrix/go-xco](https://github.com/mndrix/go-xco)
+
 ## Usage:
 
 	import (
