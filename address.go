@@ -3,9 +3,10 @@ package xco
 import (
 	"bytes"
 	"encoding/xml"
-	"errors"
 	"fmt"
 	"strings"
+
+	"github.com/pkg/errors"
 )
 
 // Address is an XMPP JID address
@@ -57,7 +58,11 @@ func (a *Address) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 	}
 	errs := a.validate()
 	if len(errs) != 0 {
-		return xml.Attr{}, fmt.Errorf("Malformed Address for Attribute %s: %s", name, errs)
+		return xml.Attr{}, &multiError{
+			errs: errs,
+			mainError: errors.Errorf(
+				"Malformed Address for Attribute %s", name),
+		}
 	}
 
 	return xml.Attr{
@@ -69,7 +74,6 @@ func (a *Address) MarshalXMLAttr(name xml.Name) (xml.Attr, error) {
 func (a *Address) validate() []error {
 
 	var errs []error
-
 	if a != nil && a.LocalPart != "" && a.DomainPart == "" {
 		errs = append(errs, errors.New("Domain is empty"))
 	}

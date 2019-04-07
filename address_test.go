@@ -1,6 +1,11 @@
 package xco
 
-import "testing"
+import (
+	"encoding/xml"
+	"testing"
+
+	"github.com/pkg/errors"
+)
 
 var nilAddress = Address{}
 var withDomain = Address{DomainPart: "example.com"}
@@ -55,5 +60,53 @@ func TestStringAddress(t *testing.T) {
 			t.Errorf("%v.String() => {%s}, expected {%s}",
 				sat.Input, out, sat.Output)
 		}
+	}
+}
+
+func attrEquals(a *xml.Attr, b *xml.Attr) bool {
+	if a == b {
+		return true
+	}
+	if a == nil && b != nil {
+		return false
+	}
+	if a != nil && b == nil {
+		return false
+	}
+
+	if a.Name.Space != b.Name.Space {
+		return false
+	}
+	if a.Name.Local != b.Name.Local {
+		return false
+	}
+	if a.Value != b.Value {
+		return false
+	}
+
+	return true
+}
+
+var marshallXMLAddressTests = []struct {
+	Input  *Address
+	Output xml.Attr
+	Error  string
+}{
+	{nil, xml.Attr{}, ""},
+	{&Address{"", "example.com", ""},
+		xml.Attr{Name: xml.Name{}, Value: "example.com"}, ""},
+	{&Address{"asdf", "", ""},
+		xml.Attr{}, "[Domain is empty]"},
+}
+
+func TestMarshallXMLAddress(t *testing.T) {
+	for _, mat := range marshallXMLAddressTests {
+		out, err := mat.Input.MarshalXMLAttr(xml.Name{})
+		matches := attrEquals(&out, &mat.Output) && (err == nil && mat.Error == "" || errors.Cause(err).Error() == mat.Error)
+		if !matches {
+			t.Errorf("{%s}.MarshalXMLAttr({}) => {%s,%v}, expected {%v,%s}",
+				mat.Input, out, errors.Cause(err), mat.Output, mat.Error)
+		}
+
 	}
 }
