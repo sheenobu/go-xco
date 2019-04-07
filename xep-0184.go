@@ -1,7 +1,7 @@
 package xco
 
-// ReceiptAck represents an acknowledgement that the message with Id
+// ReceiptAck represents an acknowledgement that the message with ID
 // has been received.
 type ReceiptAck struct {
-	Id string `xml:"id,attr"`
+	ID string `xml:"id,attr"`
 }
