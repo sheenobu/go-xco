@@ -83,7 +83,7 @@ func (c *Component) handshakeState() (st stateFn, err error) {
 			return
 		}
 
-		t, err = c.dec.Token()
+		_, err = c.dec.Token()
 		if err != nil {
 			return
 		}
