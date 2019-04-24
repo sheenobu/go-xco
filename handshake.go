@@ -11,11 +11,7 @@ import (
 )
 
 func sendStreamStart(w io.Writer, name string) (err error) {
-	_, err = fmt.Fprintf(w,
-		`<stream:stream
-			xmlns='jabber:component:accept'
-			xmlns:stream='http://etherx.jabber.org/streams'
-			to='%s'>`, name)
+	_, err = fmt.Fprintf(w, `<stream:stream xmlns='jabber:component:accept' xmlns:stream='http://etherx.jabber.org/streams' to='%s'>`, name)
 	err = errors.Wrapf(err, "failed to write stream start for %s", name)
 	return
 }
